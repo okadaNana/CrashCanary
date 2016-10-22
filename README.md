@@ -1,3 +1,5 @@
+[English](./README_EN.md)
+
 # CrashCanary
 
 一个错误日志捕获工具
