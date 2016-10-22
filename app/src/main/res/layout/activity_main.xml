@@ -16,5 +16,12 @@
         android:id="@+id/btn_divide_by_zero"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="divide by zero"/>
+        android:text="divided by zero"/>
+
+    <Button
+        android:id="@+id/btn_throw_nullpointer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="null pointer"/>
+
 </LinearLayout>

@@ -3,7 +3,10 @@ package com.owen.crashcanary;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.annotation.NonNull;
 
+import com.owen.crashcanary.model.CrashCause;
+import com.owen.crashcanary.model.CrashLogs;
 import com.owen.crashcanary.ui.CrashInfoActivity;
 
 import java.io.PrintWriter;
@@ -23,23 +26,31 @@ public class CrashCanary implements Thread.UncaughtExceptionHandler {
     }
 
     @Override
-    public void uncaughtException(Thread t, Throwable e) {
+    public void uncaughtException(Thread t, Throwable ex) {
+        CrashLogs logs = getCrashLogs(ex);
+        CrashInfoActivity.actionStart(mContext, logs);
+        exitApp();
+    }
+
+    @NonNull
+    private CrashLogs getCrashLogs(Throwable ex) {
         StringWriter strWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(strWriter);
-        e.printStackTrace(printWriter);
+        ex.printStackTrace(printWriter);
 
-        Throwable nextCause = e.getCause();
+        CrashLogs logs = new CrashLogs();
+        CrashCause cause = new CrashCause(strWriter.toString());
+        logs.add(cause);
+
+        Throwable nextCause = ex.getCause();
         while (nextCause != null) {
             nextCause.printStackTrace(printWriter);
             nextCause = nextCause.getCause();
+
+            logs.add(new CrashCause(strWriter.toString()));
         }
-
-        String crashInfo = strWriter.toString();
         printWriter.close();
-
-        CrashInfoActivity.actionStart(mContext, crashInfo);
-
-        exitApp();
+        return logs;
     }
 
     private void exitApp() {

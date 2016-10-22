@@ -2,11 +2,14 @@ package com.owen.crashcanary.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.owen.crashcanary.R;
+import com.owen.crashcanary.adapter.CrashListAdapter;
+import com.owen.crashcanary.model.CrashLogs;
 
 public class CrashInfoActivity extends AppCompatActivity {
 
@@ -17,12 +20,13 @@ public class CrashInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crash_info);
 
-        TextView tvCrashInfo = (TextView) findViewById(R.id.tv_crash_info);
-        String crashInfo = getIntent().getStringExtra(EXTRA_CRASH_INFO);
-        tvCrashInfo.setText(crashInfo);
+        CrashLogs logs = (CrashLogs) getIntent().getSerializableExtra(EXTRA_CRASH_INFO);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_crash_log);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new CrashListAdapter(logs.getCauses()));
     }
 
-    public static void actionStart(Context context, String crashInfo) {
+    public static void actionStart(Context context, CrashLogs crashInfo) {
         Intent intent = new Intent(context, CrashInfoActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(EXTRA_CRASH_INFO, crashInfo);
