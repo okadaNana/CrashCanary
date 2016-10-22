@@ -1,5 +1,6 @@
 # CrashCanary
-A uncaught exception handler library 
+
+一个错误日志捕获工具
 
 ## 为什么需要这么一个工具
 
@@ -37,4 +38,3 @@ public class CrashCanary implements Thread.UncaughtExceptionHandler {
 ## 感谢
 
 * [CrashWoodpecker](https://github.com/drakeet/CrashWoodpecker)
-
